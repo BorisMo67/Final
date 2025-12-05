@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>Standings</title>
+
+        <!-- SortableJS -->
+        <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+
+        <style>
+            table {
+                border-collapse: collapse;
+                margin: 20px;
+                float: left;
+                width: 220px;
+            }
+            td, th {
+                border: 1px solid #666;
+                padding: 6px 10px;
+            }
+            th {
+                background: #eee;
+            }
+            .club {
+                cursor: move;
+            }
+            .pos-number {
+                color: #444;
+                width: 30px;
+                text-align: right;
+                padding-right: 10px;
+                font-weight: bold;
+            }
+            .container {
+                display: flex;
+                gap: 20px;
+            }
+
+            /* --- COLORING RULES --- */
+
+            /* UCL (blue) */
+            .ucl-top24 { background-color: rgba(0, 120, 255, 0.25); }
+            .ucl-top8  { background-color: rgba(0, 120, 255, 0.55) !important; }
+
+            /* UEL (orange) */
+            .uel-top24 { background-color: rgba(255, 140, 0, 0.25); }
+            .uel-top8  { background-color: rgba(255, 140, 0, 0.55) !important; }
+
+            /* UECL (green) */
+            .uecl-top24 { background-color: rgba(0, 180, 0, 0.25); }
+            .uecl-top8  { background-color: rgba(0, 180, 0, 0.55) !important; }
+
+        </style>
+    </head>
+
+    <body>
+
+        <h2>Final League Stage Standings</h2>
+
+        <form method="POST" action="/submit">
+
+            <div class="container">
+
+                <!-- UCL -->
+                <table>
+                    <thead>
+                        <tr>
+                            <th colspan="2">UCL</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ucl-table">
+                    {% for club in ucl %}
+                        <tr class="club">
+                            <td class="pos-number"></td>
+                            <td class="club-name">{{ club }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+                <!-- UEL -->
+                <table>
+                    <thead>
+                        <tr>
+                            <th colspan="2">UEL</th>
+                        </tr>
+                    </thead>
+                    <tbody id="uel-table">
+                    {% for club in uel %}
+                        <tr class="club">
+                            <td class="pos-number"></td>
+                            <td class="club-name">{{ club }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+                <!-- UECL -->
+                <table>
+                    <thead>
+                        <tr>
+                            <th colspan="2">UECL</th>
+                        </tr>
+                    </thead>
+                    <tbody id="uecl-table">
+                    {% for club in uecl %}
+                        <tr class="club">
+                            <td class="pos-number"></td>
+                            <td class="club-name">{{ club }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
+
+            <br><br>
+
+            <input type="hidden" id="form-data" name="standings_json">
+            <button type="submit">Submit</button>
+
+        </form>
+
+        <script>
+
+            function renumberAndColor(tableId, prefix) {
+                const rows = document.querySelectorAll(`#${tableId} tr`);
+
+                rows.forEach((row, i) => {
+                    row.querySelector(".pos-number").textContent = (i + 1) + ".";
+
+                    row.classList.remove(
+                        `${prefix}-top8`,
+                        `${prefix}-top24`
+                    );
+
+                    if (i < 8) {
+                        row.classList.add(`${prefix}-top24`);
+                        row.classList.add(`${prefix}-top8`);
+                    } else if (i < 24) {
+                        row.classList.add(`${prefix}-top24`);
+                    }
+                });
+            }
+
+            function makeTableSortable(id, prefix) {
+                const el = document.getElementById(id);
+
+                new Sortable(el, {
+                    animation: 150,
+                    group: { name: id, pull: false, put: false },
+                    onSort: function() {
+                        renumberAndColor(id, prefix);
+                    }
+                });
+
+                // initial numbering & coloring
+                renumberAndColor(id, prefix);
+            }
+
+            // UCL = blue, UEL = orange, UECL = green
+            makeTableSortable("ucl-table", "ucl");
+            makeTableSortable("uel-table", "uel");
+            makeTableSortable("uecl-table", "uecl");
+
+            document.querySelector("form").addEventListener("submit", function() {
+
+                const data = {};
+
+                function processTable(tblId) {
+                    const rows = document.querySelectorAll(`#${tblId} tr`);
+                    rows.forEach((row, index) => {
+                        const club = row.querySelector(".club-name").innerText.trim();
+                        data[club] = index + 1;
+                    });
+                }
+
+                processTable("ucl-table");
+                processTable("uel-table");
+                processTable("uecl-table");
+
+                document.getElementById("form-data").value = JSON.stringify(data);
+            });
+        </script>
+
+    </body>
+    
+</html>

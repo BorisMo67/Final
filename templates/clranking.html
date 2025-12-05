@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Club Ranking 2026
+{% endblock %}
+
+{% block main %}
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Country</th>
+            <th>2021/22</th>
+            <th>2022/23</th>
+            <th>2023/24</th>
+            <th>2024/25</th>
+            <th>2025/26</th>
+            <th>Total</th>
+            <th>Country Part</th>
+        </tr>
+        {% for club in data %}
+            <tr>
+                <td>{{ club.club }}</td>
+                <td>{{ club.country }}</td>
+                <td>{{ club.s2022 }}</td>
+                <td>{{ club.s2023 }}</td>
+                <td>{{ club.s2024 }}</td>
+                <td>{{ club.s2025 }}</td>
+                <td>{{ club.s2026 }}</td>
+                <td>
+                    {% if club.total >= club.country_c %}
+                        <b>{{ club.total }}</b>
+                    {% else %}
+                        {{ club.total }}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if club.country_c > club.total %}
+                        <b>{{ club.country_c | round(3) }}</b>
+                    {% else %}
+                        {{ club.country_c | round(3) }}
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

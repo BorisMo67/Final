@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+    <head>
+        <title>Test</title>
+    </head>
+
+    <body>
+        <main class="container py-5 text-center">
+            <table>
+                <tr>
+                    <th>Klub</th>
+                    <th>Koeficijent</th>
+                </tr>
+                {% for klub in povrat %}
+                    <tr>
+                        <td>{{ klub }}</td>
+                        <td>{{ klub }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </main>
+    </body>
+</html>

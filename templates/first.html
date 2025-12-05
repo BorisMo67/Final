@@ -1,0 +1,66 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    UCL 1st Qualifying Round Calculation
+{% endblock %}
+
+{% block main %}
+    <form action="/first" method="post">
+        <table style="width:100%">
+            <thead>
+                <tr>Champions</tr>
+            </thead>
+            <tbody>
+                {% for i in range((countries|length+3)//4) %}
+                    <tr>
+                        {% for j in range(4) %}
+                            <td id="{{ countries[4*i+j] }}-td">
+                                {% if 4*i+j < countries|length %}
+                                    {{ countries[4*i+j] }}:
+                                    <select class="menu" id="{{ countries[4*i+j] }}" name="{{ countries[4*i+j] }}" style="width: 150px;">
+                                        {% for club in clubs[4*i+j] %}
+                                            <option value="{{ club }}">{{ club }}</option>
+                                        {% endfor %}
+                                    </select>
+                                {% endif %}
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <p>
+            <input type="checkbox" id="RussiaBanned" checked>
+            Russia banned
+        </p>
+        <p>
+            <input name="UCL-th" type="checkbox" value="yes">
+            UCL titleholder secured LS domestically
+        </p>
+        <button class="btn btn-primary" type="submit">Calculate</button>
+    </form>
+{% endblock %}
+
+{% block script %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const checkbox = document.getElementById("RussiaBanned");
+        const select31 = document.getElementById("Russia-td");
+        const select32 = document.getElementById("{{ countries[0] }}-td");
+
+        function updateVisibility() {
+            const shouldHide = checkbox.checked;
+
+            select31.classList.toggle("hidden", shouldHide);
+            select32.classList.toggle("hidden", shouldHide);
+
+            document.getElementById("Russia").disabled = shouldHide;
+            document.getElementById("{{ countries[0] }}").disabled = shouldHide;
+        }
+
+        updateVisibility();
+
+        checkbox.addEventListener("change", updateVisibility);
+    });
+</script>
+{% endblock %}
