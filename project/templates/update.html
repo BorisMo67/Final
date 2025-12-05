@@ -1,0 +1,71 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Update database
+{% endblock %}
+
+{% block main %}
+    <form action="/update" method="post">
+        <table style="width:100%">
+            <thead>
+                <tr>UEFA Champions League</tr>
+            </thead>
+            <tbody>
+                {% for name in ucl %}
+                    <tr>
+                        <td>{{ name }}</td>
+                        <td>
+                            <input type="radio" id="{{ name }}-w" name="{{ name }}" value="w" required>
+                            <label for="{{ name }}-w">W</label>
+                            <input type="radio" id="{{ name }}-d" name="{{ name }}" value="d">
+                            <label for="{{ name }}-d">D</label>
+                            <input type="radio" id="{{ name }}-l" name="{{ name }}" value="l">
+                            <label for="{{ name }}-l">L</label>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <table style="width:100%">
+            <thead>
+                <tr>UEFA Europa League</tr>
+            </thead>
+            <tbody>
+                {% for name in uel %}
+                    <tr>
+                        <td>{{ name }}</td>
+                        <td>
+                            <input type="radio" id="{{ name }}-w" name="{{ name }}" value="w" required>
+                            <label for="{{ name }}-w">W</label>
+                            <input type="radio" id="{{ name }}-d" name="{{ name }}" value="d">
+                            <label for="{{ name }}-d">D</label>
+                            <input type="radio" id="{{ name }}-l" name="{{ name }}" value="l">
+                            <label for="{{ name }}-l">L</label>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <table style="width:100%">
+            <thead>
+                <tr>UEFA Conference League</tr>
+            </thead>
+            <tbody>
+                {% for name in uecl %}
+                    <tr>
+                        <td>{{ name }}</td>
+                        <td>
+                            <input type="radio" id="{{ name }}-w" name="{{ name }}" value="w" required>
+                            <label for="{{ name }}-w">W</label>
+                            <input type="radio" id="{{ name }}-d" name="{{ name }}" value="d">
+                            <label for="{{ name }}-d">D</label>
+                            <input type="radio" id="{{ name }}-l" name="{{ name }}" value="l">
+                            <label for="{{ name }}-l">L</label>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <button class="btn btn-primary" type="submit">Submit</button>
+    </form>
+{% endblock %}

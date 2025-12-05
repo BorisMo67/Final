@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Country Ranking 2026
+{% endblock %}
+
+{% block main %}
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>2021/22</th>
+            <th>2022/23</th>
+            <th>2023/24</th>
+            <th>2024/25</th>
+            <th>2025/26</th>
+            <th>Total</th>
+        </tr>
+        {% for country in data %}
+            <tr>
+                <td>{{ country.name }}</td>
+                <td>{{ country.s2022 }}</td>
+                <td>{{ country.s2023 }}</td>
+                <td>{{ country.s2024 }}</td>
+                <td>{{ country.s2025 }}</td>
+                <td>{{ country.s2026 }}</td>
+                <td>{{ country.total | round(3) }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

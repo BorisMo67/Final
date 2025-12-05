@@ -1,0 +1,96 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    UCL {{ rnd }} Qualifying Round Calculation
+{% endblock %}
+
+{% block main %}
+    {% if rnd == '2nd' %}
+    <form action="/second" method="post">
+    {% else %}
+    <form action="/third" method="post">
+    {% endif %}
+        <table style="width:100%">
+            <thead>
+                <tr>1st qualifying round</tr>
+            </thead>
+            <tbody>
+                {% for i in range((countries1|length+3)//4) %}
+                    <tr>
+                        {% for j in range(4) %}
+                            <td id="{{ countries1[4*i+j] }}-td">
+                                {% if 4*i+j < countries1|length %}
+                                    {{ countries1[4*i+j] }}:
+                                    <select class="menu" id="{{ countries1[4*i+j] }}" name="{{ countries1[4*i+j] }}" style="width: 150px;">
+                                        {% for club in clubs1[4*i+j] %}
+                                            <option value="{{ club }}">{{ club }}</option>
+                                        {% endfor %}
+                                    </select>
+                                {% endif %}
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <table style="width:100%">
+            <thead>
+                <tr>2nd qualifying round</tr>
+            </thead>
+            <tbody>
+                {% for i in range((countries2|length+3)//4) %}
+                    <tr>
+                        {% for j in range(4) %}
+                            <td id="{{ countries2[4*i+j] }}-ts">
+                                {% if 4*i+j < countries2|length %}
+                                    {{ countries2[4*i+j] }}:
+                                    <select class="menu" id="{{ countries2[4*i+j] }}-s" name="${{ countries2[4*i+j] }}" style="width: 150px;">
+                                        {% for club in clubs2[4*i+j] %}
+                                            <option value="{{ club }}">{{ club }}</option>
+                                        {% endfor %}
+                                    </select>
+                                {% endif %}
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <p>
+            <input type="checkbox" id="RussiaBanned" checked>
+            Russia banned
+        </p>
+        <p>
+            <input name="UCL-th" type="checkbox" value="yes">
+            UCL titleholder secured LS domestically
+        </p>
+        <button class="btn btn-primary" type="submit">Calculate</button>
+    </form>
+{% endblock %}
+
+{% block script %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const checkbox = document.getElementById("RussiaBanned");
+        const select31 = document.getElementById("Russia-td");
+        const select32 = document.getElementById("{{ countries1[0] }}-td");
+        const select33 = document.getElementById("{{ countries2[8] }}-ts");
+
+        function updateVisibility() {
+            const shouldHide = checkbox.checked;
+
+            select31.classList.toggle("hidden", shouldHide);
+            select32.classList.toggle("hidden", shouldHide);
+            select33.classList.toggle("hidden", !shouldHide);
+
+            document.getElementById("Russia").disabled = shouldHide;
+            document.getElementById("{{ countries1[0] }}").disabled = shouldHide;
+            document.getElementById("{{ countries2[8] }}-s").disabled = !shouldHide;
+        }
+
+        updateVisibility();
+
+        checkbox.addEventListener("change", updateVisibility);
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Seeding
+{% endblock %}
+
+{% block main %}
+    <table>
+        <thead>
+            <tr>
+                <th>Seeded</th>
+                <th>Coeff</th>
+                <th>Unseeded</th>
+                <th>Coeff</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in range(champs|length // 2) %}
+                <tr>
+                    <td>{{ champs[i][0] }}</td>
+                    <td>{{ "%.3f"|format(champs[i][1]) }}</td>
+
+                    <td>{{ champs[i + champs|length // 2][0] }}</td>
+                    <td>{{ "%.3f"|format(champs[i + champs|length // 2][1]) }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
